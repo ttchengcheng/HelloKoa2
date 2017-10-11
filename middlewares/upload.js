@@ -18,6 +18,7 @@ function isMultipart(ctx) {
 // handle upload
 function upload() {
     return condition(isMultipart, async function (ctx, next) {
+        // TODO: handle no file is selected
         for (var file of ctx.request.files) {
             const reader = fs.createReadStream(file.path);
             const stream = fs.createWriteStream(path.join(__dirname + '/../uploaded_files', file.name));
