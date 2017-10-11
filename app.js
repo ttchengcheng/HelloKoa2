@@ -1,5 +1,3 @@
-const fs = require('fs')
-const path = require('path')
 const Koa = require('koa')
 const app = new Koa()
 const json = require('koa-json')
@@ -10,6 +8,8 @@ const bodyparser = require('koa-better-body')
 const views = require('./lib/views')
 const index = require('./routes/index')
 const users = require('./routes/users')
+
+const upload = require('./lib/middleware_condition')
 
 // error handler
 onerror(app)
@@ -22,24 +22,28 @@ app.use(bodyparser())
   .use(views)
 
 // logger
-app.use(async (ctx, next) => {
+app.use(async(ctx, next) => {
   const start = new Date()
   await next()
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.origin} - ${ms}ms\n${ctx.request.type}`)
 })
 
-// handle upload
-app.use(async (ctx, next) => {
-  if ('POST' != ctx.method || ctx.request.type != "multipart/form-data") return await next();
-  const file = ctx.request.files[0];
-  const reader = fs.createReadStream(file.path);
-  const stream = fs.createWriteStream(path.join(__dirname + '/uploaded_files', Math.random().toString()));
-  reader.pipe(stream);
-  console.log('uploading %s -> %s', file.name, stream.path);
+// function isMultipart(ctx) {
+//   return 'POST' == ctx.method || ctx.request.type == "multipart/form-data";
+// }
+// // handle upload
+// app.use(condition(isMultipart, async(ctx, next) => {
+//   for (var file of ctx.request.files) {
+//     const reader = fs.createReadStream(file.path);
+//     const stream = fs.createWriteStream(path.join(__dirname + '/uploaded_files', file.name));
+//     reader.pipe(stream);
+//     console.log('uploading %s -> %s', file.name, stream.path);
+//   }
 
-  ctx.redirect('/');
-})
+//   ctx.redirect('/');
+// }));
+app.use(upload());
 
 // routes
 app.use(index.routes(), index.allowedMethods())
