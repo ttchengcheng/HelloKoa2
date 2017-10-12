@@ -1,33 +1,34 @@
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const path = require('path');
+const condition = require('./lib').condition
 
-function condition(check, mw) {
-    return async function (ctx, next) {
-        if (!check(ctx)) {
-            await next();
-        } else {
-            // must .call() to explicitly set the receiver
-            await mw.call(this, ctx, next);
-        }
-    };
-}
-
+// check if the request is upload
 function isMultipart(ctx) {
-    return 'POST' == ctx.method || ctx.request.type == "multipart/form-data";
+  return 'POST' == ctx.method || ctx.request.type == 'multipart/form-data';
 }
 // handle upload
 function upload() {
-    return condition(isMultipart, async function (ctx, next) {
-        // TODO: handle no file is selected
-        for (var file of ctx.request.files) {
-            const reader = fs.createReadStream(file.path);
-            const stream = fs.createWriteStream(path.join(__dirname + '/../uploaded_files', file.name));
-            reader.pipe(stream);
-            console.log('uploading %s -> %s', file.name, stream.path);
-        }
+  return condition(isMultipart, async function(ctx, next) {
+    // create the dir if it does not exist
+    const dir = __dirname + '/../uploaded_files';
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir);
+    }
 
-        ctx.redirect('/');
-    });
+    for (var file of ctx.request.files) {
+      // if no file is selected actually
+      if (!file.name) {
+        continue;
+      }
+      const reader = fs.createReadStream(file.path);
+      const stream = fs.createWriteStream(path.join(dir, file.name));
+      reader.pipe(stream);
+      console.log('uploading %s -> %s', file.name, stream.path);
+    }
+
+    // TODO:
+    ctx.redirect('/upload');
+  });
 }
 
 module.exports = upload;

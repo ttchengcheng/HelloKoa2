@@ -11,6 +11,7 @@ const users = require('./routes/users')
 const views = require('./middlewares/views')
 const upload = require('./middlewares/upload')
 const log = require('./middlewares/logger')
+const statics = require('./middlewares/statics')
 
 // error handler
 onerror(app)
@@ -19,7 +20,7 @@ onerror(app)
 app.use(bodyparser())
   .use(json())
   .use(logger())
-  .use(require('koa-static')(__dirname + '/public'))
+  .use(statics)
   .use(views)
   .use(log())
   .use(upload());
