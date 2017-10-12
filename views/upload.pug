@@ -1,6 +1,8 @@
+extends layout
+
 block content
-    h1= mesage
+    h1= message
     p Try uploading multiple files at a time.
     form(action="/" method="post" enctype="multipart/form-data")
-        input(type="file" name="file" multiple)
+        input(type="file" name="file" value="Select" multiple)
         input(type="submit" value="Upload")

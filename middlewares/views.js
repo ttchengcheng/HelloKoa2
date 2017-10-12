@@ -1,5 +1,5 @@
 const views = require('koa-views')
 
-module.exports = views(__dirname + '/../views', {
-    extension: 'pug'
-})
+module.exports = () => {
+  return views(__dirname + '/../views', {extension: 'pug'});
+};
