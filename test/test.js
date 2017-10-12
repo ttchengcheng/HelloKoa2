@@ -1,4 +1,3 @@
-require('should');
 const app = require('../app');
 const request = require('supertest').agent(app.listen());
 
