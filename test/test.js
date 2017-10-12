@@ -27,6 +27,11 @@ describe('http get', () => {
        (done) => { request.get('/users/bar').expect(200, done); });
   });
 
+  describe('when GET /stylesheets/style.css', () => {
+    it('should show static resource',
+       (done) => { request.get('/stylesheets/style.css').expect(200, done); });
+  });
+
   describe('when GET /user', () => {
     it('should be a non-exist page',
        (done) => { request.get('/user').expect(302, done); });
