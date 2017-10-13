@@ -1,3 +1,7 @@
+# TODO:
+
+* styling the file input control
+
 # Mongo DB
 
 ## install mongo db

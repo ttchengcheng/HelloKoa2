@@ -1,8 +1,11 @@
 extends layout
 
 block content
-    h1= message
-    p Try uploading multiple files at a time.
-    form(action="/" method="post" enctype="multipart/form-data")
-        input(type="file" name="file" value="Select" multiple)
-        input(type="submit" value="Upload")
+    div(class="ui middle aligned center aligned grid")
+        div(class="column")
+            h1(class="ui teal image header") #{message}
+            p Try uploading multiple files at a time.
+            form(action="/" method="post" enctype="multipart/form-data" class="ui form")
+                div(class="field")
+                    input(type="file" name="file" id="filei" value="Select" multiple)
+                button(class="ui fluid large teal button" type="submit") Upload
