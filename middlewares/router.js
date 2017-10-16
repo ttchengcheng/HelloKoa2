@@ -10,7 +10,8 @@ router.use('/404', pageNotFound.routes(), pageNotFound.allowedMethods());
 
 router.get('/upload', async (ctx, next) => {
   await ctx.render('upload', {
-    message: "Upload Images"
+    title: "Upload Images",
+    message: "Try uploading multiple files at a time."
   })
 });
 

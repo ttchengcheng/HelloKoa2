@@ -2,13 +2,15 @@ const router = require('koa-router')()
 
 router.get('/', async (ctx, next) => {
   await ctx.render('404', {
-    path: "",
+    title: "Page not found",
+    message: ""
   })
 });
 
 router.get('/:path', async (ctx, next) => {
   await ctx.render('404', {
-    path: decodeURIComponent(ctx.params['path']),
+    title: "Page not found",
+    message: `[${decodeURIComponent(ctx.params['path'])}]] doesn't exist`
   })
 });
 

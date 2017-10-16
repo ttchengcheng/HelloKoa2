@@ -1,11 +1,14 @@
 extends layout
 
 block content
-    div(class="ui middle aligned center aligned grid")
-        div(class="column")
-            h1(class="ui teal image header") #{message}
-            p Try uploading multiple files at a time.
-            form(action="/" method="post" enctype="multipart/form-data" class="ui form")
-                div(class="field")
-                    input(type="file" name="file" id="filei" value="Select" multiple)
-                button(class="ui fluid large teal button" type="submit") Upload
+    .column
+        form(action="/" method="post" enctype="multipart/form-data")
+            .file.has-name.is-fullwidth
+                label.file-label
+                    input.file-input(type='file', name='resume')
+                    span.file-cta
+                    span.file-icon
+                        i.fa.fa-upload
+                    span.file-label Choose a file…
+                    span.file-name Screen Shot 2017-07-29 at 15.54.25.png
+            button(class="ui fluid large teal button" type="submit") Upload
