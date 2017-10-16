@@ -1,14 +1,19 @@
 extends layout
+block hcontent
+  script(language="javascript" src="javascripts/upload.js")
+  script(language="javascript") initUploadControl();
 
 block content
-    .column
-        form(action="/" method="post" enctype="multipart/form-data")
-            .file.has-name.is-fullwidth
-                label.file-label
-                    input.file-input(type='file', name='resume')
-                    span.file-cta
-                    span.file-icon
-                        i.fa.fa-upload
-                    span.file-label Choose a file…
-                    span.file-name Screen Shot 2017-07-29 at 15.54.25.png
-            button(class="ui fluid large teal button" type="submit") Upload
+  form(id="fileform" method="post" enctype="multipart/form-data")
+    .file.has-name.is-fullwidth
+      label.file-label
+        input.file-input(type='file', id='file', name='file' multiple)
+        span.file-cta
+          span.file-icon
+            i.fa.fa-upload
+          span.file-label Choose a file…
+        span.file-name(id='filename') 0 file(s) selected
+        button(class="ui fluid large teal button" type="submit") Upload
+
+  table(class="table is-fullwidth is-hoverable")
+    tbody(id='filelist')

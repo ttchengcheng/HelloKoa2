@@ -26,8 +26,7 @@ function upload() {
       console.log('uploading %s -> %s', file.name, stream.path);
     }
 
-    // TODO:
-    ctx.redirect('/upload');
+    ctx.status = 200;
   });
 }
 
