@@ -1,13 +1,58 @@
+- var isRoot = path == '/';
+- var isChart = path == '/chart';
+- var isUpload = path == '/upload'
+- var isFavorite = path == '/favorite'
+
 nav.breadcrumb(aria-label='breadcrumbs')
   ul
-    li
-      a(href='#') Bulma
-    li
-      a(href='#') Documentation
-    li
-      a(href='#') Components
-    li.is-active
-      a(href='#', aria-current='page') Breadcrumbss
+    if isRoot
+      li.is-active
+        a(href='/') 
+          span(class="icon is-small")
+            i(class="fa fa-home")
+          span Kandy
+    else
+      li
+        a(href='/') 
+          span(class="icon is-small")
+            i(class="fa fa-home")
+          span Kandy
+    if isChart
+      li.is-active
+        a(href='/chart') 
+          span(class="icon is-small")
+            i(class="fa fa-line-chart")
+          span Chart
+    else
+      li
+        a(href='/chart') 
+          span(class="icon is-small")
+            i(class="fa fa-line-chart")
+          span Chart
+    if isUpload
+      li.is-active
+        a(href='/upload') 
+          span(class="icon is-small")
+            i(class="fa fa-upload")
+          span Upload
+    else  
+      li
+        a(href='/upload') 
+          span(class="icon is-small")
+            i(class="fa fa-upload")
+          span Upload
+    if isFavorite
+      li.is-active
+        a(href='/favorites', aria-current='page') 
+          span(class="icon is-small")
+            i(class="fa fa-star")
+          span Favorite
+    else
+      li
+        a(href='/favorites', aria-current='page') 
+          span(class="icon is-small")
+            i(class="fa fa-star")
+          span Favorite
 
 .
 h1(class="title")=title
