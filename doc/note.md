@@ -65,3 +65,15 @@ db.logs.drop()
 db.logs.find()
 ```
 
+# shits
+
+## view path problem
+
+if there are a folder named 'upload' and a file named 'upload.pug',
+this line will try the fold('upload/index.pug') instead of the file.
+then boom!
+
+```js
+ctx.render('upload', ...);
+```
+
