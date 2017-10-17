@@ -1,3 +1,6 @@
+# .
+http://shellscape.org/2016/11/04/running-with-koa-vuejs
+
 # the file input problem
 
 * the default looking of file input is ugly
