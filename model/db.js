@@ -1,5 +1,6 @@
+const config = require('../config')
 const mongoose = require('mongoose');
-const db = mongoose.createConnection('localhost', 'hello_koa2');
+const db = mongoose.createConnection('localhost', config.db.names);
 
 db.on('error', () => {
     console.error('db connect failed.');
