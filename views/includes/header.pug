@@ -1,3 +1,17 @@
+mixin navItem(isActive, href, icon, text)
+  if isActive
+    li.is-active
+      a(href=href) 
+        span(class="icon is-small")
+          i(class=icon)
+        span=text
+  else
+    li
+      a(href=href) 
+        span(class="icon is-small")
+          i(class=icon)
+        span=text
+
 - var isRoot = path == '/';
 - var isChart = path == '/chart';
 - var isUpload = path == '/upload'
@@ -5,55 +19,10 @@
 
 nav.breadcrumb(aria-label='breadcrumbs')
   ul
-    if isRoot
-      li.is-active
-        a(href='/') 
-          span(class="icon is-small")
-            i(class="fa fa-home")
-          span Kandy
-    else
-      li
-        a(href='/') 
-          span(class="icon is-small")
-            i(class="fa fa-home")
-          span Kandy
-    if isChart
-      li.is-active
-        a(href='/chart') 
-          span(class="icon is-small")
-            i(class="fa fa-line-chart")
-          span Chart
-    else
-      li
-        a(href='/chart') 
-          span(class="icon is-small")
-            i(class="fa fa-line-chart")
-          span Chart
-    if isUpload
-      li.is-active
-        a(href='/upload') 
-          span(class="icon is-small")
-            i(class="fa fa-upload")
-          span Upload
-    else  
-      li
-        a(href='/upload') 
-          span(class="icon is-small")
-            i(class="fa fa-upload")
-          span Upload
-    if isFavorite
-      li.is-active
-        a(href='/favorites', aria-current='page') 
-          span(class="icon is-small")
-            i(class="fa fa-star")
-          span Favorite
-    else
-      li
-        a(href='/favorites', aria-current='page') 
-          span(class="icon is-small")
-            i(class="fa fa-star")
-          span Favorite
+    +navItem(isRoot, '/', 'fa fa-home', 'Kandy')
+    +navItem(isChart, '/chart', 'fa fa-line-chart', 'Chart')
+    +navItem(isUpload, '/upload', 'fa fa-upload', 'Upload')
+    +navItem(isFavorite, '/favorite', 'fa fa-star', 'Favorite')
 
-.
 h1(class="title")=title
   p(class="subtitle is-6") #{message}
