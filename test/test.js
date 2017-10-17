@@ -29,7 +29,7 @@ describe('http get', () => {
 
   describe('when GET /stylesheets/style.css', () => {
     it('should show static resource',
-       (done) => { request.get('/stylesheets/style.css').expect(200, done); });
+       (done) => { request.get('/stylesheets/bulma.css').expect(200, done); });
   });
 
   describe('when GET /user', () => {
