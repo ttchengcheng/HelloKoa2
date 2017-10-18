@@ -4,7 +4,8 @@ const routeMap = new Map([
   ["", "index"],
   ["users", "users"],
   ["404", "page-not-found"],
-  ["upload", "upload"]
+  ["upload", "upload"],
+  ["chart", "chart"]
 ]);
 
 for (let [path, routerName] of routeMap) {

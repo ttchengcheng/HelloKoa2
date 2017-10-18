@@ -17,6 +17,11 @@ describe('http get', () => {
        (done) => { request.get('/404').expect(200, done); });
   });
 
+  describe('when GET /chart', () => {
+    it('should show chart page',
+       (done) => { request.get('/chart').expect(200, done); });
+  });
+
   describe('when GET /users', () => {
     it('should show users page',
        (done) => { request.get('/users').expect(200, done); });

@@ -1,6 +1,34 @@
 # .
 http://shellscape.org/2016/11/04/running-with-koa-vuejs
 
+# todo
+
+## content
+
+### images
+
+#### uploading
+* filter by extension
+* create thumbnail
+* record graph date
+
+#### loading
+* progressively loading
+
+### video
+
+### event
+### article
+### data record
+
+## management
+
+### templates
+
+### rating
+
+### comment
+
 # the file input problem
 
 * the default looking of file input is ugly
