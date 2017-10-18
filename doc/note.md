@@ -1,5 +1,4 @@
 # .
-http://shellscape.org/2016/11/04/running-with-koa-vuejs
 
 # todo
 

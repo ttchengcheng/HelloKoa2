@@ -1,7 +1,7 @@
 extends layout
 
-mixin oneFigure()
-  article(class="tile is-child notification is-info")
+mixin oneFigure(type)
+  article(class="tile is-child notification is-" + type)
     p(class="title") Middle tile
     p(class="subtitle") With an image
     figure(class="image is-4by3")
@@ -10,10 +10,10 @@ mixin oneFigure()
 mixin template1()
   .tile.is-ancestor.is-vertical
     .tile.is-parent
-      +oneFigure()
+      +oneFigure("info")
     .tile.is-parent
-      +oneFigure()
-      +oneFigure()
+      +oneFigure("primary")
+      +oneFigure("warning")
 
 block content
   +template1()

@@ -1,23 +1,16 @@
 mixin navItem(isActive, href, icon, text)
-  if isActive
-    li.is-active
-      a(href=href) 
-        span(class="icon is-small")
-          i(class=icon)
-        span=text
-  else
-    li
-      a(href=href) 
-        span(class="icon is-small")
-          i(class=icon)
-        span=text
+  li(class={"is-active": isActive})
+    a(href=href) 
+      span(class="icon is-small")
+        i(class=icon)
+      span=text
 
 - var isRoot = path == '/';
 - var isChart = path == '/chart';
 - var isUpload = path == '/upload'
 - var isFavorite = path == '/favorite'
 
-nav.breadcrumb(aria-label='breadcrumbs')
+nav.breadcrumb
   ul
     +navItem(isRoot, '/', 'fa fa-home', 'Kandy')
     +navItem(isChart, '/chart', 'fa fa-line-chart', 'Chart')
@@ -25,4 +18,4 @@ nav.breadcrumb(aria-label='breadcrumbs')
     +navItem(isFavorite, '/favorite', 'fa fa-star', 'Favorite')
 
 h1(class="title")=title
-  p(class="subtitle is-6") #{message}
+  p(class="subtitle is-6")=message
