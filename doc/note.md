@@ -9,12 +9,14 @@
 #### uploading
 * filter by extension
 * create thumbnail
-* record graph date
+* get photo date
+* record photo date
 
 #### loading
 * progressively loading
 
 ### video
+* get video information (create time...) [ffprobe](https://github.com/eugeneware/ffprobe)
 
 ### event
 ### article

@@ -11,6 +11,8 @@
   "dependencies": {
     "debug": "^2.6.3",
     "eslint": "^4.8.0",
+    "exiftool-vendored": "^4.4.1",
+    "ffprobe": "^1.1.0",
     "koa": "^2.2.0",
     "koa-better-body": "^3.0.4",
     "koa-convert": "^1.2.0",
