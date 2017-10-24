@@ -97,6 +97,10 @@ db.logs.drop()
 db.logs.find()
 ```
 
+## mongoose
+
+* .find() is async
+
 # shits
 
 ## view path problem

@@ -1,25 +1,34 @@
-const mongoose = require('mongoose');
-const db = require('./db');
+const mongoose = require('mongoose')
+const db = require('./db')
 
 const AssetSchema = new mongoose.Schema({
   // file-name of the asset
   file: String,
   // checksum: file checksum
   checksum: String,
+  // datetime: file created time
+  datetime: String,
   // type: 1-pic 2-video 3-text 4-data 5 event
-  type: Number, 
+  type: Number,
   // file-name of the thumbnail
   thumbnail: String,
   // times being lauded
   up: Number
-  //  tag: String 
-});
+  //  tag: String
+})
 
-AssetSchema.static.exist = function(checksum) {
-  let found = false;
-  this.find({ checksum: this.checksum }, (asset) => { found = true; });
-  return found;
-};
-const AssetModel = db.model('Asset', AssetSchema);
+AssetSchema.statics.exist = async function (checksum, cb) {
+  let that = this
+  return new Promise(function (resolve, reject) {
+    that.find({ 'checksum': checksum }, null, null,
+    (err, asset) => {
+      if (err) {
+        console.error(err)
+      }
+      resolve(asset && asset.length > 0)
+    })
+  })
+}
+const AssetModel = db.model('Asset', AssetSchema)
 
-module.exports = AssetModel;
+module.exports = AssetModel

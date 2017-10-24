@@ -1,0 +1,11 @@
+{
+  "db": { "name": "hello_koa2" },
+  "file": {
+    "hash": "md5",
+    "dir": "assets",
+    "thumbnail": {
+      "dir": "assets/thumbnails",
+      "quality": 60
+    }
+  }
+}

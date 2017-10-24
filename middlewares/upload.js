@@ -1,12 +1,11 @@
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+const fs = require('fs')
+const path = require('path')
+const Jimp = require('jimp')
 const condition = require('../lib/util').condition
-const config = require('../config');
-const ChecksumStream = require('../lib/file-checksum');
-const getResInfo = require('../lib/res-info');
-const Asset = require('../model/asset');
-
+const config = require('../config')
+const ChecksumStream = require('../lib/file-checksum')
+const getResInfo = require('../lib/res-info')
+const Asset = require('../model/asset')
 /*
  * process routine:
  *      -> (ok) upload file and compute checksum
@@ -35,118 +34,127 @@ const Asset = require('../model/asset');
  *        count: 4,
  *        folder: '/path/to/output'
  *      });
- *
  */
 
 // check if the request is upload
-function isMultipart(ctx) {
-  return 'POST' == ctx.method || ctx.request.type == 'multipart/form-data';
+function isMultipart (ctx) {
+  return ctx.method === 'POST' || ctx.request.type === 'multipart/form-data'
 }
 
-async function doUpload(dir, file) {
-  return new Promise(resolved, rejected, () => {
-    const iStream = fs.createReadStream(file.path);
-    const oStream = fs.createWriteStream(path.join(dir, file.name));
-    const mStream = new ChecksumStream(config.hashType);
-    mStream.on('done', function(checksum) {
+function assetDir () {
+  const dir = path.join(__dirname, '/../' + config.file.dir)
+  const thumbnailDir = path.join(__dirname, '/../' + config.file.thumbnail.dir)
+
+  if (!fs.existsSync(dir)) { fs.mkdirSync(dir) }
+  if (!fs.existsSync(thumbnailDir)) { fs.mkdirSync(thumbnailDir) }
+
+  return [dir, thumbnailDir]
+}
+
+async function doUpload (dir, file) {
+  return new Promise(function (resolve, reject) {
+    const iStream = fs.createReadStream(file.path)
+    const oStream = fs.createWriteStream(path.join(dir, file.name))
+    const mStream = new ChecksumStream(config.file.hash)
+    mStream.on('done', function (checksum) {
       console.log(
-          'uploading %s -> %s, checksum is %s', file.name, oStream.path,
-          checksum);
-      resolved(checksum);
-    });
-    iStream.pipe(mStream).pipe(oStream);
+          'uploading %s -> %s, checksum is %s',
+          file.name, oStream.path, checksum)
+      resolve(checksum)
+    })
+    iStream.pipe(mStream).pipe(oStream)
   })
 }
 
-function getAssetType(file) {
+function getAssetType (file) {
   if (!file || !file.name) {
-    return -1;  // invalid
+    return -1  // invalid
   }
-
-  const ext = path.extname(file.name).toLocaleLowerCase();
-  if (ext == '.jpg' || ext == '.jpeg' || ext == '.png') {
-    return 1;  // image
+  const ext = path.extname(file.name).toLocaleLowerCase()
+  if (ext === '.jpg' || ext === '.jpeg' || ext === '.png') {
+    return 1  // image
   }
-  if (ext == '.mp4') {
-    return 2;  // video
+  if (ext === '.mp4') {
+    return 2  // video
   } else {
-    return -2;  // not supported
+    console.error(`Unknow file type for file (${file.name})`)
+    return -2  // not supported
   }
 }
 
+async function genThumbnail (sourceFile, thumbnailDir) {
+  let thumbnail = path.basename(sourceFile)
+  await Jimp.read(sourceFile)
+      .then(function (image) {
+        let x = 256
+        let y = Jimp.AUTO
+        if (image.bitmap.width < image.bitmap.height) {
+          x = Jimp.AUTO
+          y = 256
+        }
+        image
+            .resize(x, y)  // resize
+            .quality(config.file.thumbnail.quality)   // set JPEG quality
+            .write(path.join(thumbnailDir, thumbnail))
+      })
+      .catch(function (err) {
+        console.error(err)
+        thumbnail = ''
+      })
+
+  return thumbnail
+}
+
+function saveToDb (file, checksum, date, fileType, thumbnail) {
+  let asset = new Asset({
+    file: file,
+    checksum: checksum,
+    datetime: date,
+    type: fileType,
+    thumbnail: thumbnail,
+    up: 0
+  })
+
+  return asset.save()
+}
 // handle upload
-// TODO: refactor with promise chain
-function
-upload() {
-  return condition(isMultipart, async function(ctx, next) {
+function upload () {
+  return condition(isMultipart, async function (ctx, next) {
     // create the dir if it does not exist
-    const dir = __dirname + '/../uploaded_files';
-    const thumbnailDir = __dirname + '/../thumbnail';
+    let stat = {err: [], exist: [], ok: []}
 
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-
-    if (!fs.existsSync(thumbnailDir)) {
-      fs.mkdirSync(thumbnailDir);
-    }
-
-    let static = {err: 0, exist: 0, ok: 0};
+    const [dir, thumbnailDir] = assetDir()
 
     for (var file of ctx.request.files) {
       // if no file is selected actually
-      let fileType = getAssetType(file);
-      if (fileType < 0) {
-        console.error(`Unknow file type ${fileType} for file (${file.name})`);
-        static.err++;
-        continue;
-      }
+      let fileType = getAssetType(file)
+      if (fileType < 0) { stat.err.push(file.name); continue }
 
-      let checksum = await doUpload(dir, file);
-      if (!checksum) {
-        static.err++;
-        continue;
-      }
+      // upload and generate checksum
+      let checksum = await doUpload(dir, file)
+      if (!checksum) { stat.err.push(file.name); continue }
 
-      if (!Asset.exist(checksum)) {
-        static.exist++;
-        continue;
-      }
+      // check asset duplicating
+      if (await Asset.exist(checksum)) { stat.exist.push(file.name); continue }
 
-      let info = await getResInfo(file.name);
-      let thumbnail = '__thmb__' + file.name;
-      await Jimp.read(file.name)
-          .then(function(image) {
-            let x = 256;
-            let y = Jimp.AUTO;
-            if (image.bitmap.width < image.bitmap.height) {
-              x = Jimp.AUTO;
-              y = 256;
-            }
-            image
-                .resize(x, y)  // resize
-                .quality(60)   // set JPEG quality
-                .write(path.join(thumbnailDir, thumbnail));
-          })
-          .catch(function(err) {
-            console.error(err);
-            static.err++;
-            thumbnail = "";
-          });
+      let serverFilePath = path.join(dir, file.name)
 
-      let asset = new Asset({
-        file: file.name,
-        checksum: checksum,
-        date: info.date,
-        type: fileType,
-        thumbnail: thumbnail,
-        up: 0
-      });
+      // get exif info
+      let info = await getResInfo(serverFilePath)
 
-      asset.save();
+      // create thumbnail
+      let thumbnail = await genThumbnail(serverFilePath, thumbnailDir)
+      if (!thumbnail) { stat.err.push(file.name); continue }
+
+      // save record to db
+      await saveToDb(file.name, checksum, info.date, fileType, thumbnail)
+      stat.ok.push(file.name)
     }
-    ctx.status = 200;
-  });
+
+    // console.log(stat)
+    // ctx.status = 200
+    // ctx.body = JSON.stringify(stat)
+  })
 }
 
-module.exports = upload;
+module.exports = upload
