@@ -82,7 +82,7 @@ function getAssetType (file) {
   }
 }
 
-async function genThumbnail (sourceFile, thumbnailDir) {
+async function genThumbnail (fileType, sourceFile, thumbnailDir) {
   let thumbnail = path.basename(sourceFile)
   await Jimp.read(sourceFile)
       .then(function (image) {
@@ -143,17 +143,19 @@ function upload () {
       let info = await getResInfo(serverFilePath)
 
       // create thumbnail
-      let thumbnail = await genThumbnail(serverFilePath, thumbnailDir)
-      if (!thumbnail) { stat.err.push(file.name); continue }
+      let [thumbnailOk, thumbnail] = await genThumbnail(fileType, serverFilePath, thumbnailDir)
+      if (!thumbnailOk) { stat.err.push(file.name); continue }
 
       // save record to db
       await saveToDb(file.name, checksum, info.date, fileType, thumbnail)
       stat.ok.push(file.name)
     }
 
-    // console.log(stat)
-    // ctx.status = 200
-    // ctx.body = JSON.stringify(stat)
+    console.log(stat)
+    ctx.status = 200
+    ctx.body = JSON.stringify(stat)
+
+    // TODO: client-side progress display
   })
 }
 

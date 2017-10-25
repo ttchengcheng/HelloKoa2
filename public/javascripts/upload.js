@@ -71,6 +71,9 @@ function initUploadControl () {
             ' occurred when trying to upload your file.<br />')
       }
     }
+    oReq.upload.onprogress = function (ev) {
+      console.log(ev)
+    }
 
     oReq.send(oData)
     event.preventDefault()
