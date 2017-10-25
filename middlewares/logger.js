@@ -1,7 +1,7 @@
-const LogModel = require('../model/log');
+const LogModel = require('../model/log')
 
 // logger
-function log() {
+function log () {
   return async function (ctx, next) {
     const start = new Date()
     await next()
@@ -11,9 +11,9 @@ function log() {
       method: ctx.method,
       href: ctx.href,
       time: ms
-    });
+    })
 
-    aLog.save();
+    aLog.save()
 
     console.log(`\n${aLog.method} ${aLog.href} - ${aLog.time}ms\n`)
   }

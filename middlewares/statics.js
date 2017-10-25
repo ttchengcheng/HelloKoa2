@@ -1,5 +1,5 @@
-const statics = require('koa-static');
-
+const statics = require('koa-static')
+const path = require('path')
 module.exports = () => {
-  return statics(__dirname + '/../public');
-};
+  return statics(path.join(__dirname, '/../public'))
+}
