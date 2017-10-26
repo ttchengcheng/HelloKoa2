@@ -9,6 +9,12 @@
 #### uploading
 * filter by extension
 * create thumbnail
+
+create video thumbnail by node-fluent-ffmpeg, which need ffmpeg installed
+```bash
+brew install ffmpeg
+```
+
 * get photo date
 * record photo date
 
@@ -99,7 +105,12 @@ db.logs.find()
 
 ## mongoose
 
-* .find() is async
+* almost all the functions are async
+* promise deprecated warning:
+  > DeprecationWarning: Mongoose: mpromise (mongoose's default promise library) is deprecated
+  ```js
+  mongoose.Promise = global.Promise
+  ```
 
 # shits
 
@@ -113,3 +124,19 @@ then boom!
 ctx.render('upload', ...);
 ```
 
+## install sharp
+
+  > Error: Can't find Python executable "/usr/lib/python2.7", you can set the PYTHON env variable.
+
+  ```bash
+  > which python
+  /Library/Frameworks/Python.framework/Versions/2.7/bin/python
+
+  > npm config set python /Library/Frameworks/Python.framework/Versions/2.7/bin/python
+  ```
+
+  > Error: EACCES: permission denied, mkdir '.../node_modules/sharp/build'
+
+    use `npm i sharp` instead of `sudo npm i sharp`
+
+ 

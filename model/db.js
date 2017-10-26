@@ -2,6 +2,8 @@ const config = require('../config')
 const mongoose = require('mongoose')
 const db = mongoose.createConnection('localhost', config.db.names)
 
+mongoose.Promise = global.Promise
+
 db.on('error', () => {
   console.error('db connect failed.')
 })
