@@ -26,7 +26,8 @@
     "mongoose": "^4.12.1",
     "nanoid": "^1.0.0",
     "pug": "^2.0.0-rc.1",
-    "sharp": "^0.18.4"
+    "sharp": "^0.18.4",
+    "ws": "^3.2.0"
   },
   "devDependencies": {
     "mocha": "^4.0.1",

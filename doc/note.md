@@ -111,6 +111,9 @@ db.logs.find()
   ```js
   mongoose.Promise = global.Promise
   ```
+# file upload
+
+https://developer.mozilla.org/en-US/docs/Using_files_from_web_applications
 
 # shits
 
