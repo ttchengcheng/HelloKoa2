@@ -17,15 +17,16 @@ const AssetSchema = new mongoose.Schema({
   //  tag: String
 })
 
-AssetSchema.statics.exist = async function (checksum, cb) {
+AssetSchema.statics.notExist = async function (checksum, cb) {
   let that = this
   return new Promise(function (resolve, reject) {
     that.find({ 'checksum': checksum }, null, null,
     (err, asset) => {
       if (err) {
-        console.error(err)
+        reject(err)
+      } else {
+        resolve(!(asset && asset.length > 0))
       }
-      resolve(asset && asset.length > 0)
     })
   })
 }

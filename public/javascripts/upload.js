@@ -45,7 +45,10 @@ function initUploadControl () {
 
   ws.onmessage = function (evt) {
     console.log('Received Message: ' + evt.data)
-    ws.close()
+    if (!document.nanoId && evt.data && evt.data.length > 5) {
+      document.nanoId = evt.data.substr(5)
+    }
+    // ws.close()
   }
 
   ws.onclose = function (evt) {
@@ -72,6 +75,7 @@ function initUploadControl () {
 
   function formSubmitHandler (event) {
     var oData = new FormData()
+    oData.append('nano', document.nanoId)
     for (var file of filesSelected) {
       oData.append(file.name, file)
     }
