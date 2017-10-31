@@ -22,12 +22,23 @@ const WebSocketServer = require('../websocket')
  *      -> done.
  */
 
-// check if the request is upload
-function isMultipart (ctx) {
+/**
+ * check if the request is upload
+ *
+ * @private
+ * @param {any} ctx
+ * @returns {Boolean}
+ */
+function _isMultipart (ctx) {
   return ctx.method === 'POST' || ctx.request.type === 'multipart/form-data'
 }
-
-function assetDir () {
+/**
+ * create dir for assets and thumbnails
+ *
+ * @private
+ * @returns {[String, String]} asset dir, thumbnail dir
+ */
+function _assetDir () {
   const dir = path.join(__dirname, '/../' + config.file.dir)
   const thumbnailDir = path.join(__dirname, '/../' + config.file.thumbnail.dir)
 
@@ -38,8 +49,8 @@ function assetDir () {
 }
 
 function upload () {
-  return condition(isMultipart, async function (ctx, next) {
-    const [dir, thumbnailDir] = assetDir()
+  return condition(_isMultipart, async function (ctx, next) {
+    const [dir, thumbnailDir] = _assetDir()
     const details = []
     const tasks = []
 
@@ -77,10 +88,10 @@ function upload () {
     }
 
     await Promise.all(tasks)
+
     console.log(details)
     ctx.status = 200
     ctx.body = JSON.stringify(details)
-    wss.sendMessage(client, JSON.stringify(details))
   })
 }
 

@@ -26,5 +26,3 @@ async function getResInfo (info) {
   })
 }
 module.exports = getResInfo
-
-

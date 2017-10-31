@@ -1,11 +1,17 @@
 const sharp = require('sharp')
 const ffmpeg = require('fluent-ffmpeg')
 const path = require('path')
+const config = require('../../config')
 
-function genImageThumbnail (info) {
+/**
+ * https://github.com/lovell/sharp
+ * @private
+ */
+function _genImageThumbnail (info) {
   return new Promise(function (resolve, reject) {
     const sourceFile = path.join(info.dir, info.dest)
-    let [x, y] = info.width < info.height ? [null, 256] : [256, null]
+    const size = config.file.thumbnail.size || 500
+    let [x, y] = info.width < info.height ? [null, size] : [size, null]
     sharp(sourceFile)
         .resize(x, y)  // resize
         .toFile(path.join(info.tdir, path.basename(sourceFile)))
@@ -14,10 +20,11 @@ function genImageThumbnail (info) {
   })
 }
 
-/*
- * video thumbnail: https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+/**
+ * https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+ * @private
  */
-function genVideoThumbnail (info) {
+function _genVideoThumbnail (info) {
   return new Promise(function (resolve, reject) {
     const sourceFile = path.join(info.dir, info.dest)
     ffmpeg(sourceFile)
@@ -30,13 +37,20 @@ function genVideoThumbnail (info) {
       }, info.tdir)
   })
 }
-
+/**
+ * generate thumbnail for images and videos
+ *
+ * file types supported: jpg/png/mp4
+ *
+ * @param {any} info
+ * @returns {Promise<info>}
+ */
 function genThumbnail (info) {
   switch (info.type) {
     case 1:
-      return genImageThumbnail(info)
+      return _genImageThumbnail(info)
     case 2:
-      return genVideoThumbnail(info)
+      return _genVideoThumbnail(info)
     default:
       return Promise.resolve(info)
   }
