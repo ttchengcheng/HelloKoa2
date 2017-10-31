@@ -14,6 +14,9 @@ function genImageThumbnail (info) {
   })
 }
 
+/*
+ * video thumbnail: https://github.com/fluent-ffmpeg/node-fluent-ffmpeg
+ */
 function genVideoThumbnail (info) {
   return new Promise(function (resolve, reject) {
     const sourceFile = path.join(info.dir, info.dest)
