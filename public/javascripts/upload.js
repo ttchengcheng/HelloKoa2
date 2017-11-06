@@ -1,101 +1,89 @@
 let filesSelected = []
 
-function removeItem (itemId) {
-  const oFileList = document.querySelector('#filelist')
-  for (let oEle of oFileList.childNodes) {
-    if (oEle.id === '___' + itemId) {
-      oFileList.removeChild(oEle); break
+window.uploadHandler = {
+  removeItem: function (itemId) {
+    $('#filelist').children().filter(function (index, ele) {
+      return decodeURIComponent(ele.id) === itemId
+    }).remove()
+
+    let [index, i, file] = [-1, 0, null]
+    for ([i, file] of filesSelected.entries()) {
+      if (file.name === itemId) { index = i; break }
     }
-  }
-  let i = 0
-  for (var file of filesSelected) {
-    if (file.name === decodeURIComponent(itemId)) break
-    i++
-  }
-  if (i !== filesSelected.length) {
-    filesSelected.splice(i, 1)
-  }
-  updateFileDes()
-}
-
-function updateFileDes () {
-  let fileDes = ''
-  let fileCount = filesSelected.length
-  if (fileCount === 1) {
-    fileDes = filesSelected[0].name
-  } else {
-    fileDes = `${fileCount} file(s) selected.`
-  }
-  document.querySelector('#filename').innerText = fileDes
-}
-
-function initUploadControl () {
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelector('#file').onchange = changeEventHandler
-    document.querySelector('#fileform').onsubmit = formSubmitHandler
-    updateFileDes()
-  }, false)
-
-  var ws = new WebSocket('ws://localhost:3000')
-
-  ws.onopen = function (evt) {
-    console.log('Connection open ...')
-    ws.send('Hello WebSockets!')
-  }
-
-  ws.onmessage = function (evt) {
-    console.log('Received Message: ' + evt.data)
-    if (!document.nanoId && evt.data && evt.data.length > 5) {
-      document.nanoId = evt.data.substr(5)
+    if (index >= 0) {
+      filesSelected.splice(index, 1)
     }
-    // ws.close()
-  }
+    window.uploadHandler.updateFileDes()
+  },
 
-  ws.onclose = function (evt) {
-    console.log('Connection closed.')
-  }
+  updateFileDes: function () {
+    let fileDes = ''
+    let fileCount = filesSelected.length
+    fileDes = fileCount === 1 ? filesSelected[0].name : `${fileCount} file(s).`
+    $('#filename').text(fileDes)
+  },
 
-  function changeEventHandler (event) {
-    const files = event.target.files
-    let fileListString = ''
-    for (var file of files) {
-      const itemId = encodeURIComponent(file.name)
-      fileListString +=
-          `<tr id="___${itemId}">
-            <td>${file.name}</td>
-            <td>
-              <a class="delete is-small is-pulled-right" href="javascript:removeItem('${itemId}');"/>
-            </td>
-          </tr>`
-    }
-    filesSelected = Array.from(files)
-    document.querySelector('#filelist').innerHTML = fileListString
-    updateFileDes()
-  }
+  initUploadControl: function () {
+    document.addEventListener('DOMContentLoaded', function () {
+      $('#file').change(function (event) {
+        const files = event.target.files
+        let fileListString = ''
+        for (let file of files) {
+          fileListString +=
+            `<tr id="${encodeURIComponent(file.name)}">
+              <td>${file.name}</td>
+              <td>
+                <a class="delete is-small is-pulled-right" href="javascript:window.uploadHandler.removeItem('${file.name}');"/>
+              </td>
+            </tr>`
+        }
+        filesSelected = Array.from(files)
+        document.querySelector('#filelist').innerHTML = fileListString
+        window.uploadHandler.updateFileDes()
+      })
+      $('#fileform').submit(function (event) {
+        var oData = new FormData()
+        oData.append('nano', document.nanoId)
+        for (var file of filesSelected) {
+          oData.append(file.name, file)
+        }
+        var oReq = new XMLHttpRequest()
+        oReq.open('POST', '/', true)
+        oReq.onload = function (oEvent) {
+          if (oReq.status === 200) {
+            console.log('Uploaded finished: ' + oReq.response)
+          } else {
+            console.log(
+                'Error ' + oReq.status +
+                ' occurred when trying to upload your file.<br />')
+          }
+        }
+        oReq.upload.onprogress = function (ev) {
+          console.log(ev)
+        }
+        oReq.send(oData)
+        event.preventDefault()
+      })
+      window.uploadHandler.updateFileDes()
+    }, false)
 
-  function formSubmitHandler (event) {
-    var oData = new FormData()
-    oData.append('nano', document.nanoId)
-    for (var file of filesSelected) {
-      oData.append(file.name, file)
+    const ws = new WebSocket('ws://localhost:3000')
+
+    ws.onopen = function (evt) {
+      console.log('Connection open ...')
+      ws.send('Hello WebSockets!')
     }
 
-    var oReq = new XMLHttpRequest()
-    oReq.open('POST', '/', true)
-    oReq.onload = function (oEvent) {
-      if (oReq.status === 200) {
-        console.log('Uploaded!')
-      } else {
-        console.log(
-            'Error ' + oReq.status +
-            ' occurred when trying to upload your file.<br />')
+    ws.onmessage = function (evt) {
+      console.log('Received Message: ' + evt.data)
+      if (!document.nanoId && evt.data && evt.data.length > 5) {
+        document.nanoId = evt.data.substr(5)
       }
-    }
-    oReq.upload.onprogress = function (ev) {
-      console.log(ev)
+    // ws.close()
     }
 
-    oReq.send(oData)
-    event.preventDefault()
+    ws.onclose = function (evt) {
+      console.log('Connection closed.')
+    }
   }
 }

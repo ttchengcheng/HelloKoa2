@@ -1,7 +1,8 @@
 extends layout
 block hcontent
+  script(language="javascript" src="javascripts/jquery.min.js")
   script(language="javascript" src="javascripts/upload.js")
-  script(language="javascript") initUploadControl();
+  script(language="javascript") window.uploadHandler.initUploadControl();
 
 block content
   form(id="fileform" method="post" enctype="multipart/form-data")
