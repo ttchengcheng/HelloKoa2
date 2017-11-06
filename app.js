@@ -11,7 +11,7 @@ const upload = require('./middlewares/upload')
 const router = require('./middlewares/router')
 const log = require('./middlewares/logger')
 const statics = require('./middlewares/statics')
-const pageNotFound = require('./middlewares/page-not-found')
+// const pageNotFound = require('./middlewares/page-not-found')
 
 // error handler
 onerror(app)
@@ -24,8 +24,8 @@ app.use(bodyparser())
   .use(views())
   .use(log())
   .use(upload())
-  .use(pageNotFound())
   .use(router())
+  // .use(pageNotFound())
 
 // error-handling
 app.on('error', (err, ctx) => {
