@@ -47,21 +47,29 @@ class UploadHandler {
       for (let fileObj of that.filesSelected) {
         oData.append(fileObj.file.name, fileObj.file)
       }
-      let oReq = new XMLHttpRequest()
-      oReq.open('POST', '/', true)
-      oReq.onload = function (oEvent) {
-        if (oReq.status === 200) {
-          console.log('Uploaded finished: ' + oReq.response)
-        } else {
-          console.log(
-              'Error ' + oReq.status +
-              ' occurred when trying to upload your file.<br />')
-        }
+
+      const getXhr = () => {
+        const xhr = new XMLHttpRequest()
+        xhr.upload.addEventListener('progress', function (evt) {
+          if (evt.lengthComputable) {
+            var percentComplete = evt.loaded / evt.total
+            // Do something with upload progress
+            console.log(percentComplete)
+          }
+        })
+        return xhr
       }
-      oReq.upload.onprogress = function (ev) {
-        console.log(ev)
-      }
-      oReq.send(oData)
+      $.ajax({
+        url: '/',
+        method: 'POST',
+        contentType: false,
+        processData: false,
+        xhr: getXhr,
+        data: oData
+      })
+      .done(function (xhr, status) {
+        console.log(status)
+      })
       event.preventDefault()
     })
   }
