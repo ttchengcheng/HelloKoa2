@@ -13,11 +13,31 @@ const AssetSchema = new mongoose.Schema({
   // file-name of the thumbnail
   thumbnail: String,
   // times being lauded
-  up: Number
-  //  tag: String
+  up: [Number]
 })
 
-AssetSchema.statics.notExist = async function (checksum, cb) {
+AssetSchema.statics.fav = async function (file, useId) {
+  let that = this
+  return new Promise(function (resolve, reject) {
+    that.find({ 'file': file }, (err, asset) => {
+      if (err) {
+        reject(err)
+      } else {
+        if (asset) {
+          let index = asset.up.indexOf(useId)
+          if (index >= 0) {
+            asset.up.splice(index, 1)
+          } else {
+            asset.up.push(useId)
+          }
+          asset.save()
+        }
+        resolve()
+      }
+    })
+  })
+}
+AssetSchema.statics.notExist = async function (checksum) {
   let that = this
   return new Promise(function (resolve, reject) {
     that.find({ 'checksum': checksum }, null, null,

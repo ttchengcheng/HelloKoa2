@@ -26,6 +26,9 @@ brew install ffmpeg
 
 ### event
 ### article
+
+  * [editor.md - online md editor](https://github.com/pandao/editor.md)
+  * [wysihtml5 - rich text editor based on HTML5](https://github.com/xing/wysihtml5)
 ### data record
 
 ## management

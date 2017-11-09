@@ -1,21 +1,21 @@
 mixin navItem(isActive, href, icon, text)
-  li(class={"is-active": isActive})
-    a(href=href) 
-      span(class="icon is-small")
-        i(class=icon)
-      span=text
+  li(class={"is-active": uk-active})
+    a(href=href)
+      span(class="uk-icon uk-margin-small-right" uk-icon=icon)
+      | #{text}
 
 - var isRoot = path == '/';
 - var isChart = path == '/chart';
 - var isUpload = path == '/upload'
 - var isFavorite = path == '/favorite'
 
-nav.breadcrumb
-  ul
-    +navItem(isRoot, '/', 'fa fa-home', 'Kandy')
-    +navItem(isChart, '/chart', 'fa fa-line-chart', 'Chart')
-    +navItem(isUpload, '/upload', 'fa fa-upload', 'Upload')
-    +navItem(isFavorite, '/favorite', 'fa fa-star', 'Favorite')
+nav.uk-navbar-container(uk-navbar='')
+  .uk-navbar-left
+    ul.uk-navbar-nav
+      +navItem(isRoot, '/', 'fa fa-home', 'Kandy')
+      +navItem(isChart, '/chart', 'fa fa-line-chart', 'Chart')
+      +navItem(isUpload, '/upload', 'fa fa-upload', 'Upload')
+      +navItem(isFavorite, '/favorite', 'fa fa-star', 'Favorite')
 
 h1(class="title")=title
   p(class="subtitle is-6")=message
