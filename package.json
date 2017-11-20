@@ -6,6 +6,7 @@
     "start": "node bin/www",
     "dev": "nodemon bin/www",
     "prd": "pm2 start bin/www",
+    "clr": "node test/clean.js",
     "test": "mocha"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "mongodb": "^2.2.33",
     "mongoose": "^4.12.1",
     "nanoid": "^1.0.0",
     "pug": "^2.0.0-rc.1",
