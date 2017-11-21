@@ -1,12 +1,11 @@
 const layout = require('./layout')
-const cell = require('./cells')
 
 module.exports = (props) => {
   return layout({
     path: '/',
     title: 'Hello Koa 2!',
     message: 'Welcome to Koa 2',
-    cells: cell.tile({
+    cells: `cell.tile({
       id: 'cell-body',
       imgs: [
         {
@@ -25,6 +24,6 @@ module.exports = (props) => {
           src: 'https://bulma.io/images/placeholders/640x480.png'
         }
       ]
-    })
+    })`
   })
 }

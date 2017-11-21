@@ -23,6 +23,7 @@ module.exports = (props) => {
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/css/uikit.min.css" />
       <!-- UIkit JS -->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/js/uikit.min.js"></script>
+      <script src="javascripts/cells.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.0-beta.35/js/uikit-icons.min.js"></script>
       <link rel="icon" type="image/png" href="favicon.png">
     </head>
@@ -34,7 +35,7 @@ module.exports = (props) => {
       </section>
     </body>
     <script>
-      var cells = JSON.parse('${(props.cells && JSON.stringify(props.cells)) || ''}')
+      var cells = ${props.cells || ""}
     </script>
     ${props.scripts ? props.scripts.map(script).join('') : ''}
   </html>`
