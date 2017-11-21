@@ -92,12 +92,10 @@ class UploadHandler {
   }
   init () {
     let that = this
-    $(document).ready(function () {
-      that._initFileInput()
-      that._initSubmitButton()
-      that._initWebSocket()
-      that._updateFileDes()
-    }, false)
+    that._initFileInput()
+    that._initSubmitButton()
+    that._initWebSocket()
+    that._updateFileDes()
   }
   removeItem (itemId) {
     for (let [i, fileObj] of this.filesSelected.entries()) {

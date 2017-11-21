@@ -6,30 +6,36 @@ const config = [
     text: 'Kandy'
   },
   {
-    path: '/',
+    path: '/chart',
     icon: 'fa fa-line-chart',
     text: 'Chart'
   },
   {
-    path: '/',
+    path: '/upload',
     icon: 'fa fa-upload',
     text: 'Upload'
   },
   {
-    path: '/',
+    path: '/favorite',
     icon: 'fa fa-star',
     text: 'Favorite'
   }
 ]
-const item = (text, icon, isActive) =>
-  `<li ${isActive ? 'class = "is-active"' : ''}>
-    <span class="icon is-small"><i class="${icon}"></i></span>
-    <span>${text}</span>
-  </li>`
+const item = (props) =>
+  `
+  <li${props.active ? ' class="is-active"' : ''}>
+    <a href="${props.path}">${props.text}</a>
+  </li>
+  `
 
 const itemList = (curPath) => {
-  config
-    .map((o) => item(o.text, o.icon, o.path === curPath))
+  return config
+    .map((o) => item({
+      text: o.text,
+      icon: o.icon,
+      path: o.path,
+      active: o.path === curPath
+    }))
     .reduce((list, itemStr) => { list = list || ''; return list + itemStr })
 }
 
@@ -40,6 +46,6 @@ module.exports = (props) =>
     ${itemList(props.path)}
   </ul>
   </div>
-  <h1 class="title">${props.title}</p>
+  <h1 class="title">${props.title}</h1>
   <p class="subtitle is-6">${props.message}</p>
   `

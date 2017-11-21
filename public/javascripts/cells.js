@@ -1,4 +1,4 @@
-var cell = {}
+let cell = {}
 
 cell.p = (cls, text) => ({
   $type: 'p',
@@ -26,3 +26,5 @@ cell.img = (title, subTitle, imgSrc) => ({
     }
   ]
 })
+
+module.exports = cell

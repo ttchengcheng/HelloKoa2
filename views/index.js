@@ -1,21 +1,30 @@
 const layout = require('./layout')
+const cell = require('./cells')
 
-module.exports = layout()
-
-// mixin oneFigure(type)
-//   article(class="tile is-child notification is-" + type)
-//     p(class="title") Middle tile
-//     p(class="subtitle") With an image
-//     figure(class="image is-4by3")
-//       img(src="https://bulma.io/images/placeholders/640x480.png")
-
-// mixin template1()
-//   .tile.is-ancestor.is-vertical
-//     .tile.is-parent
-//       +oneFigure("info")
-//     .tile.is-parent
-//       +oneFigure("primary")
-//       +oneFigure("warning")
-
-// block content
-//   +template1()
+module.exports = (props) => {
+  return layout({
+    path: '/',
+    title: 'Hello Koa 2!',
+    message: 'Welcome to Koa 2',
+    cells: cell.tile({
+      id: 'cell-body',
+      imgs: [
+        {
+          title: 'title',
+          subTitle: 'subTitle',
+          src: 'https://bulma.io/images/placeholders/640x480.png'
+        },
+        {
+          title: 'title',
+          subTitle: 'subTitle',
+          src: 'https://bulma.io/images/placeholders/640x480.png'
+        },
+        {
+          title: 'title',
+          subTitle: 'subTitle',
+          src: 'https://bulma.io/images/placeholders/640x480.png'
+        }
+      ]
+    })
+  })
+}
