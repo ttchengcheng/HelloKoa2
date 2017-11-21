@@ -89,76 +89,26 @@ cell.fileUploader = (props) => {
   return {
     $cell: true,
     id: props.id,
-    $type: 'div',
+    $type: 'form',
     $components: [
       {
-        $type: 'form',
-        id: 'fileform',
-        method: 'post',
-        enctype: 'multipart/form-data',
+        $type: 'div',
+        'uk-form-custom': true,
         $components: [
           {
-            $type: 'div',
-            class: 'file has-name is-fullwidth',
-            $components: [
-              {
-                $type: 'label',
-                class: 'file-label',
-                $components: [
-                  {
-                    $type: 'input',
-                    id: 'file',
-                    name: 'file',
-                    multiple: 'multiple',
-                    class: 'file-input'
-                  },
-                  {
-                    $type: 'span',
-                    class: 'file-cta',
-                    $components: [
-                      {
-                        $type: 'span',
-                        class: 'file-icon',
-                        $components: [
-                          {
-                            $type: 'i',
-                            class: 'fa fa-upload'
-                          }
-                        ]
-                      },
-                      {
-                        $type: 'span',
-                        class: 'file-icon',
-                        $text: ''
-                      }
-                    ]
-                  },
-                  {
-                    $type: 'span',
-                    id: 'file-des',
-                    class: 'file-name',
-                    $text: '0 file(s) selected'
-                  },
-                  {
-                    $type: 'button',
-                    type: 'submit',
-                    class: 'ui fluid large teal button',
-                    $text: 'Upload'
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        $type: 'table',
-        class: 'table is-fullwidth is-hoverable',
-        $components: [
+            $type: 'input',
+            type: 'file',
+            id: 'file',
+            multiple: true
+          },
           {
-            $type: 'tbody',
-            id: 'filelist'
+            $type: 'button',
+            class: 'uk-button uk-button-default',
+            type: 'button',
+            tabindex: '-1',
+            $text: 'Select'
           }
+
         ]
       }
     ]

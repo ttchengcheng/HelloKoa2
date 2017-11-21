@@ -10,7 +10,7 @@ module.exports = (props) => {
       id: 'cell-body'
     }),
     scripts: [
-      { src: 'javascripts/jquery.min.js' },
+      // { src: 'javascripts/jquery.min.js' },
       { src: 'javascripts/upload.js' },
       { text: 'window.uploader.init()' }
     ]

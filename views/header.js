@@ -23,7 +23,7 @@ const config = [
 ]
 const item = (props) =>
   `
-  <li${props.active ? ' class="is-active"' : ''}>
+  <li${props.active ? ' class="uk-active"' : ''}>
     <a href="${props.path}">${props.text}</a>
   </li>
   `
@@ -41,11 +41,9 @@ const itemList = (curPath) => {
 
 module.exports = (props) =>
   `
-  <div class="tabs is-centered">
-  <ul>
+  <ul class="uk-tab">
     ${itemList(props.path)}
   </ul>
-  </div>
   <h1 class="title">${props.title}</h1>
   <p class="subtitle is-6">${props.message}</p>
   `
