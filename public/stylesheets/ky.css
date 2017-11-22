@@ -1,0 +1,14 @@
+body {
+    width: 100%
+}
+
+/*                 nav bar                 */
+nav ul li {
+    display: inline;
+    border-right: 1px solid;
+    padding: 0 2em;
+}
+
+nav ul li:first-child {
+    border-left: 1px solid;
+}

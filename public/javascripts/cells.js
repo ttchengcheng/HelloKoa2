@@ -102,7 +102,7 @@ cell.fileItem = (props) => {
             type: 'button',
             _filename: props.text,
             'uk-close': true,
-            onclick: function(event) {
+            onclick: function (event) {
               document.querySelector('#file-list')._remove(this._filename)
             }
           }
@@ -119,8 +119,8 @@ cell.fileUploader = (props) => {
     $components: [
       {
         $type: 'form',
-        $init: function() {
-          this.addEventListener('submit', function(event) {
+        $init: function () {
+          this.addEventListener('submit', function (event) {
             let oData = new FormData()
             oData.append('nano', document.nanoId)
             let files = document.querySelector('#file-list')._files
@@ -138,7 +138,7 @@ cell.fileUploader = (props) => {
                     ' occurred when trying to upload your file.<br />')
               }
             }
-            oReq.upload.onprogress = function (evt) {		
+            oReq.upload.onprogress = function (evt) {
               if (evt.lengthComputable) {
                 let percentComplete = evt.loaded / evt.total
                 console.log(percentComplete)
@@ -158,7 +158,7 @@ cell.fileUploader = (props) => {
                 type: 'file',
                 id: 'file',
                 multiple: true,
-                $init: function() {
+                $init: function () {
                   this.addEventListener('change', function (event) {
                     document.querySelector('#file-list')._setFiles(event.target.files)
                   })
@@ -189,7 +189,7 @@ cell.fileUploader = (props) => {
             $type: 'tbody',
             id: 'file-list',
             _files: [],
-            _setFiles: function(files) {
+            _setFiles: function (files) {
               _files = []
               this.$components = []
               for (let file of files) {
@@ -198,7 +198,7 @@ cell.fileUploader = (props) => {
               }
               this._updateDes()
             },
-            _remove: function(name) {
+            _remove: function (name) {
               let i = 0
               for (let file of _files) {
                 if (file.name === name) {
@@ -210,7 +210,7 @@ cell.fileUploader = (props) => {
               }
               this._updateDes()
             },
-            _updateDes: function() {
+            _updateDes: function () {
               document.querySelector('#file-des').$text = `(${_files.length}) file(s) selected.`
             },
             $components: []

@@ -42,11 +42,9 @@ const itemList = (curPath) => {
 module.exports = (props) =>
   `
   <nav class="uk-navbar-container uk-navbar-transparent" uk-navbar>
-    <div class="uk-navbar-center">
-      <ul class="uk-navbar-nav">
-        ${itemList(props.path)}
-      </ul>
-    </div>
+    <ul class="uk-navbar-nav">
+      ${itemList(props.path)}
+    </ul>
   </nav>
   <h1 class="title">${props.title}</h1>
   <p class="subtitle is-6">${props.message}</p>
